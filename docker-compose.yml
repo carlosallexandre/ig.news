@@ -1,0 +1,21 @@
+services:
+  next:
+    build: .
+    container_name: web
+    volumes:
+      - ./:/app
+    network_mode: host
+
+  stripe:
+    image: stripe/stripe-cli
+    container_name: stripe
+    network_mode: host
+    command: [
+      "listen", 
+      "--api-key", 
+      "${STRIPE_API_KEY}",
+      "--forward-to", 
+      "localhost:3000/api/webhooks"
+      ]
+
+      
