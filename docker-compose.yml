@@ -1,7 +1,7 @@
 services:
   next:
     build: .
-    container_name: web
+    container_name: next
     volumes:
       - ./:/app
     network_mode: host
