@@ -66,21 +66,34 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const prismic = getPrismicClient()
 
-  const response = await prismic.getByUID('post', String(slug), {})
-  
-  const post = {
-    slug,
-    title: RichText.asText(response.data.title),
-    content: RichText.asHtml(response.data.content.splice(0, 3)),
-    updatedAt: new Date(response.last_publication_date)
-      .toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-      }),  
-  }
+  try {
+    const response = await prismic.getByUID('post', String(slug), {})
 
-  return {
-    props: { post }
+    const post = {
+      slug,
+      title: RichText.asText(response.data.title),
+      content: RichText.asHtml(response.data.content.splice(0, 3)),
+      updatedAt: new Date(response.last_publication_date)
+        .toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        }),  
+    }
+  
+    return {
+      props: { post }
+    }
+  } catch (err) {
+    console.error(err)
+
+    return {
+      redirect: {
+        destination: '/posts',
+        permanent: false,
+      }
+    }
   }
+  
+  
 }
